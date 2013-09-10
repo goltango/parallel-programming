@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
                 matB[i][j]=1.0;
         }
     }
-    printf("Multiplying %d x %d matrices\n", M, M);
+    printf("Multiplying %d x %d matrix.\n", M, M);
     clock_t begin = clock();
     for(i=0;i<M;i++){
         for(j=0;j<K;j++){
