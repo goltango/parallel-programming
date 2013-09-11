@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#define BUFFSIZE 1000
 
-#define BUFFSIZE 500
+/* Time in seconds from some point in the past */
+double dwalltime();
+
 int main(int argc, char *argv[])
 {
 	double **a;
@@ -10,6 +13,8 @@ int main(int argc, char *argv[])
 	int nrows = BUFFSIZE,ncolumns = BUFFSIZE;
 	int i,j,k;
 	int	tid, nthreads, chunk;
+	double timetick;
+
 	chunk = 10;
 	//reserva de memoria de a
 	a = malloc(nrows * sizeof(double *));
@@ -29,6 +34,8 @@ int main(int argc, char *argv[])
 	{
 		c[i] = malloc(ncolumns * sizeof(double));
 	}
+	/*** Marca de tiempo antes de seccion paralela ***/
+    timetick = dwalltime();
 
 	/*** Spawn a parallel region explicitly scoping all variables ***/
 	#pragma omp parallel shared(a,b,c,nthreads,chunk) private(tid,i,j,k)
@@ -62,17 +69,18 @@ int main(int argc, char *argv[])
 		{
 			printf("Thread=%d did row=%d\n",tid,i);
 			for(j=0; j<BUFFSIZE; j++)
-			for (k=0; k<BUFFSIZE; k++)
-			c[i][j] += a[i][k] * b[k][j];
+                for (k=0; k<BUFFSIZE; k++)
+                    c[i][j] += a[i][k] * b[k][j];
 		}
 	}   /*** End of parallel region ***/
 
 	/*** Print results ***/
 	printf("******************************************************\n");
+	printf("Back from multiply in %f seconds\n", dwalltime() - timetick);
 	printf("Result Matrix:\n");
-	for (i=0; i<BUFFSIZE; i++)
+	for (i=0; i<5; i++)
 	{
-		for (j=0; j<BUFFSIZE; j++)
+		for (j=0; j<5; j++)
 		printf("%.1f   ", c[i][j]);
 		printf("\n");
 	}
@@ -80,3 +88,19 @@ int main(int argc, char *argv[])
 	printf ("Done.\n");
 
 }
+
+/*****************************************************************/
+
+#include <stdio.h>
+#include <sys/time.h>
+
+double dwalltime()
+{
+	double sec;
+	struct timeval tv;
+
+	gettimeofday(&tv,NULL);
+	sec = tv.tv_sec + tv.tv_usec/1000000.0;
+	return sec;
+}
+
