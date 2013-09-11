@@ -1,17 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(){
+int main()
+{
 	double **arrayM;
 	int nrows = 5,ncolumns=5;
-	int i=0,j;
-
+	int i,j;
+    //reserva de memoria
 	arrayM = malloc(nrows * sizeof(double *));
 	for(i = 0; i < nrows; i++)
     {
         arrayM[i] = malloc(ncolumns * sizeof(double));
     }
 
+    //Seteo de valores
     for(i = 0; i < nrows; i++)
     {
         for(j = 0; j < ncolumns; j++)
@@ -21,6 +23,7 @@ int main(){
 
     }
 
+    //Impresion en pantalla de valores
     for(i = 0; i < nrows; i++)
     {
         printf("\n");
