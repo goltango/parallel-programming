@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	double **c;
 	int i,j,k;
 	int	tid, nthreads, chunk, num_threads, buffSize;
-	double timetick;
+	double timetick1, timetick2;
 
     if (argc != 4)
     {
@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
 	/*** Set threads quantity ***/
 	omp_set_num_threads(num_threads);
 
-	/*** Set timetick before parallel execution ***/
-    timetick = dwalltime();
+	/*** Set timetick1 before parallel execution ***/
+    timetick1 = dwalltime();
 
 	/*** Spawn a parallel region explicitly scoping all variables ***/
 	#pragma omp parallel shared(a,b,c,nthreads,chunk,buffSize) private(tid,i,j,k)
@@ -86,10 +86,13 @@ int main(int argc, char *argv[])
 		}
 	}   /*** End of parallel region ***/
 
+    /*** Set timetick2 after parallel execution ***/
+    timetick2 = dwalltime() - timetick1;
+
 	/*** Print results ***/
 	printf("******************************************************\n");
 	showCpuinfo();
-	printf("Back from multiply in %f seconds with %d thread(s)\n", dwalltime() - timetick, nthreads);
+	printf("Back from multiply in %f seconds with %d thread(s)\n", timetick2, nthreads);
 	printf("Example Matrix:\n");
 	for (i=0; i<5; i++)
 	{
