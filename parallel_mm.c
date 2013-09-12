@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#define BUFFSIZE 1000
-#define NUMTHREADS 4
 
 /* Time in seconds from some point in the past */
 double dwalltime();
+/* Show on screen CPU model */
+void showCpuinfo();
 
 int main(int argc, char *argv[])
 {
@@ -17,13 +17,13 @@ int main(int argc, char *argv[])
 
     if (argc != 4)
     {
-        printf("\nUsage: parallel_mm [buffSize] [num_threads] [chunk]\n");
-        return 0;
+        printf("\nUsage: parallel_mm [buffSize] [chunk] [num_threads] \n");
+        return 1;
     }
 
-	buffSize = atoi(argv[1]);;
-	num_threads = atoi(argv[2]);
-	chunk = atoi(argv[3]);
+	buffSize = atoi(argv[1]);
+	chunk = atoi(argv[2]);
+	num_threads = atoi(argv[3]);
 
 	/*** alloc memory for a matrix ***/
 	a = malloc(buffSize * sizeof(double *));
@@ -88,7 +88,8 @@ int main(int argc, char *argv[])
 
 	/*** Print results ***/
 	printf("******************************************************\n");
-	printf("Back from multiply in %f seconds\n", dwalltime() - timetick);
+	showCpuinfo();
+	printf("Back from multiply in %f seconds with %d thread(s)\n", dwalltime() - timetick, nthreads);
 	printf("Example Matrix:\n");
 	for (i=0; i<5; i++)
 	{
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
 	}
 	printf("******************************************************\n");
 	printf ("Done.\n");
-
+    return 0;
 }
 
 /*****************************************************************/
@@ -116,3 +117,34 @@ double dwalltime()
 	return sec;
 }
 
+/*****************************************************************/
+void showCpuinfo(){
+    FILE *fd;
+    int buffSize = 256;
+	char cpuinfo1[buffSize+1];
+	char cpuinfo2[buffSize+1];
+	char cpuinfo3[buffSize+1];
+	char str1 [20];
+	char str2 [20];
+	char str3 [20];
+	char str4 [20];
+	char str5 [20];
+	char str6 [20];
+
+	fd = fopen("/proc/cpuinfo","r");
+	fgets(cpuinfo1, buffSize+1, fd);
+	fgets(cpuinfo1, buffSize+1, fd);
+	fgets(cpuinfo2, buffSize+1, fd);
+	fgets(cpuinfo2, buffSize+1, fd);
+	fgets(cpuinfo2, buffSize+1, fd);
+	fclose(fd);
+	fflush (fd);
+
+    /*** Filter type and print it on screen ***/
+    sscanf(cpuinfo1,"%*s %*s %s ", str1);
+    printf("CPU Type: %s \n",str1);
+
+    /*** Filter model, copy it to str2 and print it on screen ***/
+    sscanf(cpuinfo2,"%*s %*s %*s %s %s %s %s %s %s", str1, str2, str3, str4, str5, str6);
+    printf("CPU Model: %s %s %s\n",str1, str2, str3, str5, str6);
+}
