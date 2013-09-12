@@ -8,9 +8,9 @@ void showCpuinfo();
 
 int main(int argc, char *argv[])
 {
-	double **a;
-	double **b;
-	double **c;
+	float **a;
+	float **b;
+	float **c;
 	int i,j,k;
 	int	tid, nthreads, chunk, num_threads, buffSize;
 	double timetick1, timetick2;
@@ -26,22 +26,22 @@ int main(int argc, char *argv[])
 	num_threads = atoi(argv[3]);
 
 	/*** alloc memory for a matrix ***/
-	a = malloc(buffSize * sizeof(double *));
+	a = malloc(buffSize * sizeof(float *));
 	for(i = 0; i < buffSize; i++)
 	{
-		a[i] = malloc(buffSize * sizeof(double));
+		a[i] = malloc(buffSize * sizeof(float));
 	}
 	/*** alloc memory for b matrix ***/
-	b = malloc(buffSize * sizeof(double *));
+	b = malloc(buffSize * sizeof(float *));
 	for(i = 0; i < buffSize; i++)
 	{
-		b[i] = malloc(buffSize * sizeof(double));
+		b[i] = malloc(buffSize * sizeof(float));
 	}
 	/*** alloc memory for c matrix ***/
-	c = malloc(buffSize * sizeof(double *));
+	c = malloc(buffSize * sizeof(float *));
 	for(i = 0; i < buffSize; i++)
 	{
-		c[i] = malloc(buffSize * sizeof(double));
+		c[i] = malloc(buffSize * sizeof(float));
 	}
 	/*** Set threads quantity ***/
 	omp_set_num_threads(num_threads);
