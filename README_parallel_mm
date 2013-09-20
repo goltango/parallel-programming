@@ -1,0 +1,137 @@
+Multiplica matrices cuadradas usando openmp y mide los tiempos de ejecucion.
+Las matrices a multiplicar son de variables tipo float.
+
+#Compilacion
+
+$ gcc -fopenmp parallel_mm.c -o parallel_mm
+
+#Ejecucion:
+
+$ ./parallel_mm [tamMatriz] [chunk] [num_threads]
+
+ejemplo: 
+$ ./parallel_mm 1000 10 4 
+Calculara la multiplicacion de dos matrices cuadradas de 1000x1000 con un paso de valor 10 usando 4 threads.
+
+#Resultados:
+
+Al finalizar la ejecucion muestra en pantalla el tiempo medido para el calculo, marca y modelo del CPU y una version recotada (5x5) de la matriz resultado como para verificar que el calculo haya sido correctamente calculado.
+
+#Estadisticas
+Se presentan algunos resultados de ejecucion sobre distintos sistemas, donde se aprecia un rendimiento optimo del calculo cuando el numero de threads seteado en [num_threads] coincide con el numero de threads disponibles fisicamente en el sistema.
+
+$ ./parallel_mm 1000 10 X
+
+(Donde X toma los valores 1, 2, 4, 8 y 16).
+
+En los test realizados sobre sistemas mononucleo el aumento en [num_threads] relentiza la ejecucion, aunque no debe tomarse esto como regla general.
+
+
+******************************************************
+CPU Type: AuthenticAMD 
+CPU Model: AMD Opteron(tm) Processor
+CPU cores: 32
+Algorithm(1): c[i][j] += a[i][k] * b[k][j];
+
+Back from multiply in 22.504768 seconds with 1 thread(s)
+Back from multiply in 12.742037 seconds with 2 thread(s)
+Back from multiply in 6.278812 seconds with 4 thread(s)
+Back from multiply in 3.198329 seconds with 8 thread(s)
+Back from multiply in 1.769770 seconds with 16 thread(s)
+Back from multiply in 1.015001 seconds with 32 thread(s)
+Back from multiply in 0.978780 seconds with 64 thread(s)
+Back from multiply in 0.854469 seconds with 128 thread(s)
+Back from multiply in 0.877785 seconds with 256 thread(s)
+Back from multiply in 0.899105 seconds with 512 thread(s)
+
+******************************************************
+CPU Type: AuthenticAMD 
+CPU Model: AMD Opteron(tm) Processor
+CPU cores: 32
+Algorithm(2): c[i][k] += a[i][j]*b[j][k];
+
+Back from multiply in 16.274939 seconds with 1 thread(s)
+Back from multiply in 8.261907 seconds with 2 thread(s)
+Back from multiply in 4.098685 seconds with 4 thread(s)
+Back from multiply in 2.139633 seconds with 8 thread(s)
+Back from multiply in 1.162849 seconds with 16 thread(s)
+Back from multiply in 0.664907 seconds with 32 thread(s)
+Back from multiply in 0.647564 seconds with 64 thread(s)
+Back from multiply in 0.569627 seconds with 128 thread(s)
+Back from multiply in 0.577461 seconds with 256 thread(s)
+Back from multiply in 0.668264 seconds with 512 thread(s)
+
+******************************************************
+CPU Type: AuthenticAMD 
+CPU Model: Dual-Core AMD Opteron(tm)
+CPU cores: 4
+Algorithm 1 (c[i][j] += a[i][k] * b[k][j])
+
+Back from multiply in 32.812672 seconds with 1 thread(s)
+Back from multiply in 18.077205 seconds with 2 thread(s)
+Back from multiply in 9.067720 seconds with 4 thread(s)
+Back from multiply in 8.344191 seconds with 8 thread(s)
+Back from multiply in 8.514335 seconds with 16 thread(s)
+Back from multiply in 8.490732 seconds with 32 thread(s)
+Back from multiply in 8.270925 seconds with 64 thread(s)
+Back from multiply in 8.106821 seconds with 128 thread(s)
+Back from multiply in 8.097211 seconds with 256 thread(s)
+Back from multiply in 8.083472 seconds with 512 thread(s)
+
+******************************************************
+CPU Type: AuthenticAMD 
+CPU Model: Dual-Core AMD Opteron(tm)
+CPU cores: 4
+Algorithm 2 (c[i][k] += a[i][j]*b[j][k])
+
+Back from multiply in 26.188607 seconds with 1 thread(s)
+Back from multiply in 13.157655 seconds with 2 thread(s)
+Back from multiply in 6.597935 seconds with 4 thread(s)
+Back from multiply in 6.607157 seconds with 8 thread(s)
+Back from multiply in 6.611466 seconds with 16 thread(s)
+Back from multiply in 6.697794 seconds with 32 thread(s)
+Back from multiply in 6.550255 seconds with 64 thread(s)
+Back from multiply in 6.537467 seconds with 128 thread(s)
+Back from multiply in 6.543463 seconds with 256 thread(s)
+Back from multiply in 6.566318 seconds with 512 thread(s)
+
+******************************************************
+CPU Type: GenuineIntel 
+CPU Model: Intel(R) Xeon(R) CPU
+CPU cores: 8
+Algorithm 1 (c[i][j] += a[i][k] * b[k][j])
+
+Back from multiply in 15.595085 seconds with 1 thread(s)
+Back from multiply in 7.889073 seconds with 2 thread(s)
+Back from multiply in 3.951253 seconds with 4 thread(s)
+Back from multiply in 1.951100 seconds with 8 thread(s)
+Back from multiply in 2.113468 seconds with 16 thread(s)
+Back from multiply in 2.069080 seconds with 32 thread(s)
+Back from multiply in 1.966726 seconds with 64 thread(s)
+Back from multiply in 1.966393 seconds with 128 thread(s)
+Back from multiply in 1.970207 seconds with 256 thread(s)
+Back from multiply in 1.980816 seconds with 512 thread(s)
+
+******************************************************
+CPU Type: GenuineIntel 
+CPU Model: Intel(R) Xeon(R) CPU
+CPU cores: 8
+Algorithm 2 (c[i][k] += a[i][j]*b[j][k])
+
+Back from multiply in 11.214738 seconds with 1 thread(s)
+Back from multiply in 5.613173 seconds with 2 thread(s)
+Back from multiply in 2.868959 seconds with 4 thread(s)
+Back from multiply in 1.465295 seconds with 8 thread(s)
+Back from multiply in 1.469962 seconds with 16 thread(s)
+Back from multiply in 1.495240 seconds with 32 thread(s)
+Back from multiply in 1.416403 seconds with 64 thread(s)
+Back from multiply in 1.418616 seconds with 128 thread(s)
+Back from multiply in 1.424017 seconds with 256 thread(s)
+Back from multiply in 1.434719 seconds with 512 thread(s)
+
+
+
+
+
+
+
