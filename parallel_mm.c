@@ -79,10 +79,11 @@ int main(int argc, char *argv[])
 		#pragma omp for schedule (static, chunk)
 		for (i=0; i<buffSize; i++)
 		{
-			printf("Thread=%d did row=%d\n",tid,i);
+//			printf("Thread=%d did row=%d\n",tid,i);
 			for(j=0; j<buffSize; j++)
                 for (k=0; k<buffSize; k++)
                     c[i][j] += a[i][k] * b[k][j];
+ //                   c[i][k] += a[i][j]*b[j][k];
 		}
 	}   /*** End of parallel region ***/
 
@@ -92,7 +93,10 @@ int main(int argc, char *argv[])
 	/*** Print results ***/
 	printf("******************************************************\n");
 	showCpuinfo();
-	printf("Back from multiply in %f seconds with %d thread(s)\n", timetick2, nthreads);
+	printf("Back from multiply in %f seconds with %d thread(s)\n\n", timetick2, nthreads);
+	printf(" ________________________________________\n");
+	printf("|Algorithm: c[i][j] += a[i][k] * b[k][j];|\n");
+	printf("|________________________________________|\n\n");
 	printf("Example Matrix:\n");
 	for (i=0; i<5; i++)
 	{
